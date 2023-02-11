@@ -26,15 +26,25 @@ public class OrderRepository {
         if (orderPartnerPairHashMap.containsKey(partner)){
             orderList = orderPartnerPairHashMap.get(partner);
             orderList.add(order);
+            int noOfOrders = partner.getNumberOfOrders();
+            noOfOrders++;
+            partner.setNumberOfOrders(noOfOrders);
             orderPartnerPairHashMap.put(partner,orderList);
         }else{
             orderList = new ArrayList<>();
             orderList.add(order);
+            int noOfOrders = partner.getNumberOfOrders();
+            noOfOrders++;
+            partner.setNumberOfOrders(noOfOrders);
             orderPartnerPairHashMap.put(partner,orderList);
         }
     }
     public Order getOrderById(String orderId){
-        return orderHashMap.get(orderId);
+        Order order = null;
+        if (orderHashMap.containsKey(orderId)){
+            order = orderHashMap.get(orderId);
+        }
+        return order;
     }
     public DeliveryPartner getPartnerById(String partnerId){
         return deliveryPartnerHashMap.get(partnerId);
