@@ -69,17 +69,17 @@ public class OrderRepository {
     public Integer getCountOfUnassignedOrders(){
         Integer count = 0;
         for (Order order : orderHashMap.values()){
-            boolean flag = false;
             for (List<Order> orders : orderPartnerPairHashMap.values()){
+                boolean flag = false;
                 for (Order order1 : orders){
                     if (order1.equals(order)){
                         flag = true;
                         break;
                     }
                 }
-            }
-            if (flag == false){
-                count ++;
+                if (flag == false){
+                    count ++;
+                }
             }
         }
         return count;
