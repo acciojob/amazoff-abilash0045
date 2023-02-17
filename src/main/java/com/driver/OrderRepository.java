@@ -48,9 +48,12 @@ public class OrderRepository {
     }
     public List<String> getOrdersByPartnerId(String partnerId){
         List<String> orders = new ArrayList<>();
-        if (orderPartnerPairHashMap.containsKey(deliveryPartnerHashMap.get(partnerId))) {
-            for (Order order : orderPartnerPairHashMap.get(partnerId)) {
-                orders.add(order.getId());
+        if (deliveryPartnerHashMap.containsKey(partnerId)) {
+            if (orderPartnerPairHashMap.containsKey(deliveryPartnerHashMap.get(partnerId))) {
+                List<Order> orderList = orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId));
+                for (Order order : orderList){
+                    orders.add(order.getId());
+                }
             }
         }
         return orders;
@@ -116,15 +119,21 @@ public class OrderRepository {
             deliveryPartnerHashMap.remove(partnerId);
         }
     }
-    public void deleteOrderById(String orderId){
-        for (List<Order> orders : orderPartnerPairHashMap.values()){
-            for (Order order : orders){
-                if (order.getId().equals(orderId)){
-                    orders.remove(order);
-                    orderHashMap.remove(orderId);
-                    return;
+    public void deleteOrderById(String orderId) {
+        if (orderHashMap.containsKey(orderId)){
+            if (assigned.contains(orderHashMap.get(orderId))){
+                assigned.remove(orderHashMap.get(orderId));
+            }
+            for (List<Order> orderList : orderPartnerPairHashMap.values()){
+                for (Order order : orderList){
+                    if (order.equals(orderHashMap.get(orderId))){
+                        orderList.remove(order);
+                        orderHashMap.remove(orderId);
+                        return;
+                    }
                 }
             }
+            orderHashMap.remove(orderId);
         }
     }
 }
