@@ -40,9 +40,11 @@ public class OrderRepository {
         return deliveryPartnerHashMap.get(partnerId);
     }
     public Integer getOrderCountByPartnerId(String partnerId){
-        if (!orderPartnerPairHashMap.containsKey(deliveryPartnerHashMap.get(partnerId)))
-            return 0;
-        return orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId)).size();
+        Integer count = 0;
+        if (orderPartnerPairHashMap.containsKey(deliveryPartnerHashMap.get(partnerId))){
+            count = orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId)).size();
+        }
+        return count;
     }
     public List<String> getOrdersByPartnerId(String partnerId){
         List<String> orders = new ArrayList<>();
@@ -67,10 +69,15 @@ public class OrderRepository {
         Integer count = 0;
         String[] str = time.split(":");
         Integer currTime = Integer.parseInt(str[0])*60 + Integer.parseInt(str[1]);
-        List<Order> orders = orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId));
-        for (Order order : orders){
-            if (order.getDeliveryTime() < currTime){
-                count++;
+        if (orderPartnerPairHashMap.containsKey(deliveryPartnerHashMap.get(partnerId))){
+            List<Order> orders = orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId));
+            for (Order order : orders){
+                if (orderHashMap.containsKey(order.getId())){
+                    Order currOrder = orderHashMap.get(order.getId());
+                    if (currTime < currOrder.getDeliveryTime()){
+                        count++;
+                    }
+                }
             }
         }
         return count;
