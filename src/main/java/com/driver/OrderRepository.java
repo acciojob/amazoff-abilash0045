@@ -23,7 +23,10 @@ public class OrderRepository {
     }
     public void addOrderPartnerPair(String orderId,String partnerId){
         if (deliveryPartnerHashMap.containsKey(partnerId) && orderHashMap.containsKey(orderId)){
-            List<Order> orders = orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId));
+            List<Order> orders = new ArrayList<>();
+            if (orderPartnerPairHashMap.containsKey(deliveryPartnerHashMap.get(partnerId))){
+                orders = orderPartnerPairHashMap.get(deliveryPartnerHashMap.get(partnerId));
+            }
             orders.add(orderHashMap.get(orderId));
             orderPartnerPairHashMap.put(deliveryPartnerHashMap.get(partnerId),orders);
             assigned.add(orderHashMap.get(orderId));
@@ -31,11 +34,7 @@ public class OrderRepository {
         }
     }
     public Order getOrderById(String orderId){
-        Order order = null;
-        if (orderHashMap.containsKey(orderId)){
-            order = orderHashMap.get(orderId);
-        }
-        return order;
+        return orderHashMap.get(orderId);
     }
     public DeliveryPartner getPartnerById(String partnerId){
         return deliveryPartnerHashMap.get(partnerId);
